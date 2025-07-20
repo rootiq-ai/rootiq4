@@ -60,13 +60,18 @@ python cli.py setup check
    ```bash
    sudo apt update
    sudo apt install python3-pip
-   python -m venv venv
+   python3 -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
    ```
 
 2. **Setup PostgreSQL**:
    ```bash
+   sudo apt update
+   sudo apt install postgresql-client
+   sudo apt install postgresql postgresql-contrib
+
+
    # Create database
    createdb rca_system
    
@@ -74,13 +79,13 @@ python cli.py setup check
    python cli.py setup init
    ```
 
-3. **Configure environment**:
+4. **Configure environment**:
    ```bash
    cp .env.template .env
    # Edit .env and add your OpenAI API key
    ```
 
-4. **Generate sample data** (optional):
+5. **Generate sample data** (optional):
    ```bash
    python cli.py setup sample-data
    ```
