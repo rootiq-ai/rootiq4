@@ -165,6 +165,16 @@ logs() {
     fi
 }
 
+# Fix OpenAI API compatibility
+fix_openai() {
+    print_info "Fixing OpenAI API compatibility..."
+    check_venv
+    activate_venv
+    PYTHON=$(get_python)
+    
+    $PYTHON scripts/fix_openai.py
+}
+
 # Show help
 show_help() {
     echo "🔍 RCA System Startup Script"
@@ -182,6 +192,7 @@ show_help() {
     echo "  run                - Run single pipeline cycle"
     echo "  recent             - Show recent activity"
     echo "  logs               - Show recent logs"
+    echo "  fix-openai         - Fix OpenAI API compatibility"
     echo "  help               - Show this help"
     echo
     echo "Examples:"
@@ -190,6 +201,7 @@ show_help() {
     echo "  $0 api 9000        # Start API on port 9000"
     echo "  $0 dashboard       # Start dashboard on default port"
     echo "  $0 status          # Check system status"
+    echo "  $0 fix-openai      # Fix OpenAI API issues"
     echo
     echo "Quick Start:"
     echo "  1. $0 setup        # First time setup"
@@ -227,6 +239,9 @@ case "${1:-help}" in
         ;;
     "logs")
         logs
+        ;;
+    "fix-openai")
+        fix_openai
         ;;
     "help"|"--help"|"-h")
         show_help
