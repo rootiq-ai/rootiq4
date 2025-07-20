@@ -34,8 +34,13 @@ class RCAEngine:
         self.enable_agentic_fallback = rca_config['enable_agentic_fallback']
         
         # Initialize OpenAI client
+        self.openai_client = None
         if self.provider == "openai":
-            openai.api_key = os.getenv("OPENAI_API_KEY")
+            api_key = os.getenv("OPENAI_API_KEY")
+            if api_key:
+                self.openai_client = openai.OpenAI(api_key=api_key)
+            else:
+                logger.warning("OpenAI API key not found. LLM analysis will use mock responses.")
     
     def analyze_incidents(self, lookback_hours: int = 1) -> List[str]:
         """
@@ -130,8 +135,8 @@ class RCAEngine:
             prompt = self._build_rca_prompt(incident_context, similar_patterns)
             
             # Call LLM
-            if self.provider == "openai":
-                response = openai.ChatCompletion.create(
+            if self.provider == "openai" and self.openai_client:
+                response = self.openai_client.chat.completions.create(
                     model=self.model,
                     messages=[
                         {"role": "system", "content": self._get_system_prompt()},
